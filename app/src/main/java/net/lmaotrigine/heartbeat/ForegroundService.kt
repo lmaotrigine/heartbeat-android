@@ -1,5 +1,6 @@
 package net.lmaotrigine.heartbeat
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -41,16 +42,18 @@ class ForegroundService : Service() {
     private var subStatus = ""
     private var defaultSharedPreferences: SharedPreferences? = null
 
-    override fun onBind(intent: Intent?): IBinder? {
+    override fun onBind(intent: Intent?): IBinder {
         return Binder()
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         context = baseContext
         defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context!!)
         if (notificationChannel == null) {
             createNotificationChannel()
         }
+        if (notification == null) createNotification()
         startForeground(1, notification)
         context?.registerReceiver(bgService, IntentFilter(Intent.ACTION_TIME_TICK))
         context?.registerReceiver(bgService, IntentFilter(Intent.ACTION_SCREEN_ON))
@@ -62,7 +65,15 @@ class ForegroundService : Service() {
         bgService.notification = notification
         val notificationUpdateReceiver = NotificationUpdateReceiver()
         notificationUpdateReceiver.foregroundService = this
-        context?.registerReceiver(notificationUpdateReceiver, IntentFilter(ACTION_UPDATE))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context?.registerReceiver(
+                notificationUpdateReceiver, IntentFilter(ACTION_UPDATE),
+                RECEIVER_NOT_EXPORTED,
+            )
+        } else
+            context?.registerReceiver(
+                notificationUpdateReceiver, IntentFilter(ACTION_UPDATE)
+            )
         return START_STICKY
     }
 
@@ -76,7 +87,7 @@ class ForegroundService : Service() {
                         foregroundService?.status = intent.extras!!.getString("status").toString()
                         foregroundService?.subStatus = intent.extras!!.getString("sub_status").toString()
                         foregroundService?.createNotification()
-                        foregroundService?.notificationManager?.notify(1, foregroundService?.notification)
+                        foregroundService?.notificationManager?.notify(1, foregroundService!!.notification)
                     }
                 }
             }
@@ -87,7 +98,7 @@ class ForegroundService : Service() {
         val name = "Foreground Service"
         val descriptionText = "Foreground Service"
         val importance = NotificationManager.IMPORTANCE_DEFAULT
-        notificationChannel = NotificationChannel("fgservice", name, importance)
+        notificationChannel = NotificationChannel("fgService", name, importance)
         notificationChannel!!.description = descriptionText
         notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager!!.createNotificationChannel(notificationChannel!!)
@@ -113,7 +124,7 @@ class ForegroundService : Service() {
 
     inner class Binder : IBinder {
 
-        override fun getInterfaceDescriptor(): String? {
+        override fun getInterfaceDescriptor(): String {
             return "HeartbeatService"
         }
 

@@ -8,8 +8,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.PreferenceManager
 import net.lmaotrigine.heartbeat.databinding.ActivityMainBinding
 
@@ -60,7 +60,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val navController = findNavController(R.id.nav_host_fragment_content_heartbeat_status)
+        val frag = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_heartbeat_status) as NavHostFragment
+        val navController = frag.navController
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 

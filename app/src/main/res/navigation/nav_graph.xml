@@ -2,7 +2,6 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
     app:startDestination="@id/StatusFragment">
 
     <fragment
@@ -30,5 +29,5 @@
     <fragment
         android:id="@+id/AboutFragment"
         android:name="net.lmaotrigine.heartbeat.AboutFragment"
-        android:label="AboutFragment" />
+        android:label="@string/title_activity_about" />
 </navigation>

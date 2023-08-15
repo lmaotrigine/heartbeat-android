@@ -4,14 +4,11 @@ import android.app.Notification
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import androidx.preference.PreferenceManager
 import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 import java.time.Instant

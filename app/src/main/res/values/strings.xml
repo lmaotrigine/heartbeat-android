@@ -1,27 +1,16 @@
 <resources>
     <string name="app_name">Heartbeat</string>
     <string name="title_activity_heartbeat_status">Heartbeat Status</string>
-    <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">Service Status</string>
     <string name="second_fragment_label">Service Fragment</string>
-    <string name="next">Settings</string>
-    <string name="previous">Back</string>
 
     <string name="status_fragment_text">
         Current Status:
     </string>
-    <string name="status_running">Running</string>
-    <string name="status_not_running">Not Running</string>
-    <string name="status_error">ERROR</string>
     <string name="status_unknown">Unknown</string>
-    <string name="status_last_ping_datetime">Last pinged at</string>
     <string name="start_hb">Start</string>
     <string name="stop_hb">Stop</string>
-
-    <string name="foreground_service_notification_channel_name">Foreground Service</string>
-    <string name="foreground_service_notification_title">Heartbeat Status</string>
-    <string name="foreground_service_notification_content_text">Heartbeat is Running</string>
 
     <string name="settings_server_header">Server</string>
     <string name="settings_app">User Interface</string>
@@ -38,11 +27,11 @@
     <string name="title_activity_about">About</string>
     <string name="about">
                 Heartbeat for Android\n\n
-                Source: https://github.com/lmaotrigine/heartbeat-android\n\n
-                Build Time: {{build_time}}\n\n
-                Commit Count: {{commit_count}}\n\n
-                Commit: [`{{commit}}`](https://github.com/lmaotrigine/tree/{{commit}})\n\n
-                Interfaces with https://github.com/lmaotrigine/heartbeat\n\n
+                Source: [https://github.com/lmaotrigine/heartbeat-android](https://github.com/lmaotrigine/heartbeat-android)\n\n
+                Build Time: ${build_time}\n\n
+                Version: git+${commit_count}@${branch}\n\n
+                Commit: [`${commit}$`](https://github.com/lmaotrigine/heartbeat-android/tree/${commit})\n\n
+                Interfaces with [https://github.com/lmaotrigine/heartbeat](https://github.com/lmaotrigine/heartbeat)\n\n
                 Report any bugs using the button below.\n\n
     </string>
     <string name="report_bug">Report a Bug</string>
