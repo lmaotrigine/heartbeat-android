@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#E899DC</color>
+    <color name="primary_alt">#E899DC</color>
+    <color name="primary_dark">#741A67</color>
+    <color name="primary_alt_dark">#741A67</color>
+    <color name="secondary">#8EE3F5</color>
+    <color name="secondary_alt">#8EE3F5</color>
+    <color name="secondary_dark">#0B6F83</color>
+    <color name="secondary_alt_dark">#0B6F83</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="running_green">#C5E1A5</color>
+    <color name="not_running_red">#FFAB91</color>
+</resources>

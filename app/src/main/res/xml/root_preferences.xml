@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/settings_server_header">
+
+    </PreferenceCategory>
+    <EditTextPreference
+        android:key="server_url"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/setting_server_url"
+        app:useSimpleSummaryProvider="true" />
+    <EditTextPreference
+        android:key="server_authorization"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/setting_server_authorization"
+        app:useSimpleSummaryProvider="true" />
+    <PreferenceCategory android:title="@string/settings_app">
+
+    </PreferenceCategory>
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="show_ads"
+        android:title="@string/setting_ui_show_ads"
+        app:summary="@string/setting_ui_show_ads_summary" />
+    <ListPreference
+        android:defaultValue="default"
+        android:entries="@array/theme_entries"
+        android:entryValues="@array/theme_values"
+        android:key="ui_theme"
+        android:title="@string/setting_ui_theme"
+        app:useSimpleSummaryProvider="true" />
+    <PreferenceCategory android:title="@string/settings_system">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="start_on_boot"
+            android:title="@string/setting_system_start_on_boot" />
+    </PreferenceCategory>
+</PreferenceScreen>
