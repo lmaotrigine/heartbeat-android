@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+        with:
+          fetch-depth: 0
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
       - name: Set up JDK
@@ -31,6 +33,7 @@ jobs:
         run: |
           set -x
           echo "VERSION_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+          echo "PRE_RELEASE=$(awk '{print ($1 ~ /v[[:digit:]]+\.[[:digit:]]\.[[:digit:]]+(a|b|rc)[[:digit:]]*/) ? 1 : 0}' <<< "${GITHUB_REF/refs\/tags\//}")" >> $GITHUB_ENV
       - name: Sign APK
         if: startsWith(github.ref, 'refs/tags/') && github.repository == 'lmaotrigine/heartbeat-android'
         uses: r0adkll/sign-android-release@v1
@@ -44,21 +47,9 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/') && github.repository == 'lmaotrigine/heartbeat-android'
         run: |
           set -e
-          mv app/build/outputs/apk/release/app-universal-release-unsigned-signed.apk heartbeat-${{ env.VERSION_TAG }}.apk
+          mv app/build/outputs/apk/release/app-release-unsigned-signed.apk heartbeat-${{ env.VERSION_TAG }}.apk
           sha=$(sha256sum heartbeat-${{ env.VERSION_TAG }}.apk | awk '{print $1}')
           echo "APK_UNIVERSAL_SHA=$sha" >> $GITHUB_ENV
-          mv app/build/outputs/apk/release/app-arm64-v8a-release-unsigned-signed.apk heartbeat-${{ env.VERSION_TAG }}-arm64-v8a.apk
-          sha=$(sha256sum heartbeat-${{ env.VERSION_TAG }}-arm64-v8a.apk | awk '{print $1}')
-          echo "APK_ARM64_SHA=$sha" >> $GITHUB_ENV
-          mv app/build/outputs/apk/release/app-armeabi-v7a-release-unsigned-signed.apk heartbeat-${{ env.VERSION_TAG }}-armeabi-v7a.apk
-          sha=$(sha256sum heartbeat-${{ env.VERSION_TAG }}-armeabi-v7a.apk | awk '{print $1}')
-          echo "APK_ARMEABI_SHA=$sha" >> $GITHUB_ENV
-          mv app/build/outputs/apk/release/app-x86_64-release-unsigned-signed.apk heartbeat-${{ env.VERSION_TAG }}-x86_64.apk
-          sha=$(sha256sum heartbeat-${{ env.VERSION_TAG }}-x86_64.apk | awk '{print $1}')
-          echo "APK_X86_64_SHA=$sha" >> $GITHUB_ENV
-          mv app/build/outputs/apk/release/app-x86-release-unsigned-signed.apk heartbeat-${{ env.VERSION_TAG }}-x86.apk
-          sha=$(sha256sum heartbeat-${{ env.VERSION_TAG }}-x86.apk | awk '{print $1}')
-          echo "APK_X86_SHA=$sha" >> $GITHUB_ENV
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/') && github.repository == 'lmaotrigine/heartbeat-android'
         uses: softprops/action-gh-release@v1
@@ -73,17 +64,8 @@ jobs:
             |   Variant   |            SHA-256           |
             | ----------- | ---------------------------- |
             |  Universal  | ${{ env.APK_UNIVERSAL_SHA }} |
-            |  arm64-v8a  |   ${{ env.APK_ARM64_SHA }}   |
-            | armeabi-v7a |  ${{ env.APK_ARMEABI_SHA }}  |
-            |     x86     |    ${{ env.APK_X86_SHA }}    |
-            |    x86_64   |   ${{ env.APK_X86_64_SHA }}  |
           files: |
             heartbeat-${{ env.VERSION_TAG }}.apk
-            heartbeat-${{ env.VERSION_TAG }}-arm64-v8a.apk
-            heartbeat-${{ env.VERSION_TAG }}-armeabi-v7a.apk
-            heartbeat-${{ env.VERSION_TAG }}-x86_64.apk
-            heartbeat-${{ env.VERSION_TAG }}-x86.apk
-          draft: true
-          prerelease: false
+          prerelease: ${{ env.PRE_RELEASE == 1 }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

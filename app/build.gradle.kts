@@ -9,8 +9,6 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
 }
 
-val SUPPORTED_ABIS = setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
-
 fun Project.runCommand(command: String): String {
     val byteOut = ByteArrayOutputStream()
     val stdErr = ByteArrayOutputStream()
@@ -63,10 +61,6 @@ android {
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
-        ndk {
-            //noinspection ChromeOsAbiSupport
-            abiFilters += SUPPORTED_ABIS
-        }
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -74,15 +68,6 @@ android {
         buildConfigField("String", "BRANCH", "\"${getGitBranch()}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-    splits {
-        abi {
-            isEnable = true
-            reset()
-            //noinspection ChromeOsAbiSupport
-            include(*SUPPORTED_ABIS.toTypedArray())
-            isUniversalApk = true
-        }
     }
 
     buildTypes {
