@@ -37,10 +37,13 @@
     <string name="menu_about">About</string>
     <string name="title_activity_about">About</string>
     <string name="about">
-        Heartbeat for Android\n
-        Source: https://github.com/lmaotrigine/heartbeat-android\n
-        Interfaces with https://github.com/lmaotrigine/heartbeat\n
-        Report any bugs using the button below.
+                Heartbeat for Android\n\n
+                Source: https://github.com/lmaotrigine/heartbeat-android\n\n
+                Build Time: {{build_time}}\n\n
+                Commit Count: {{commit_count}}\n\n
+                Commit: [`{{commit}}`](https://github.com/lmaotrigine/tree/{{commit}})\n\n
+                Interfaces with https://github.com/lmaotrigine/heartbeat\n\n
+                Report any bugs using the button below.\n\n
     </string>
     <string name="report_bug">Report a Bug</string>
     <string name="menu_settings">Settings</string>

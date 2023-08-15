@@ -1,3 +1,8 @@
+import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.TimeZone
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.androidApplication)
@@ -5,6 +10,29 @@ plugins {
 }
 
 val SUPPORTED_ABIS = setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+
+fun Project.runCommand(command: String): String {
+    val byteOut = ByteArrayOutputStream()
+    project.exec {
+        commandLine = command.split(" ")
+        standardOutput = byteOut
+    }
+    return String(byteOut.toByteArray()).trim()
+}
+
+fun Project.getCommitCount(): String {
+    return runCommand("git rev-list --count HEAD")
+}
+
+fun Project.getGitSha(): String {
+    return runCommand("git rev-parse --short HEAD")
+}
+
+fun Project.getBuildTime(): String {
+    val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'")
+    df.timeZone = TimeZone.getTimeZone("UTC")
+    return df.format(Date())
+}
 
 android {
     namespace = "net.lmaotrigine.heartbeat"
@@ -19,6 +47,10 @@ android {
         ndk {
             abiFilters += SUPPORTED_ABIS
         }
+
+        buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
+        buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
+        buildConfigField("String", "BUILD_TIME", "\"${getBuildTime()}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -53,6 +85,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -66,6 +99,7 @@ dependencies {
     implementation(libs.navigation.ui.ktx)
     implementation(libs.androidx.preference)
     implementation(libs.play.services.ads)
+    implementation(libs.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
